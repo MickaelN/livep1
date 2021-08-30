@@ -1,8 +1,12 @@
 <?php
+//inlusion du controlleur
+require_once 'controllers/indexCtrl.php';
 //inclusion du header
 include 'views/header.php';
-?>
-<h1>Test de notre super site web</h1>
-<?php
+//Vérification que le fichier controller existe
+if (file_exists('controllers/' . $view . 'Ctrl.php')) {
+    require 'controllers/' . $view . 'Ctrl.php';
+}
+include 'views/' . $view . '.php';
 //inclusion du footer
 include 'views/footer.php';

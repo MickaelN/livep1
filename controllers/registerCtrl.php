@@ -38,7 +38,7 @@ if (isset($_POST['register'])) {
         $user->__set('pseudo', $pseudo);
         //Je hash le mot de passe
         $hashPassword = password_hash($plainPassword, PASSWORD_DEFAULT);
-        $user->__set('password', $hashPassword);
+        $user->__set('password_hash', $hashPassword);
         $user->__set('mail', $mail);
         $user->addUser();
     }

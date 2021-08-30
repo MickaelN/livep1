@@ -26,19 +26,39 @@ class Users
         $pdoStatment->bindValue(':password_hash', $this->password_hash, PDO::PARAM_STR);
         return $pdoStatment->execute();
     }
-/**
- * Fonction permettant de vérifier si un champ est unique
- *
- * @param [type] $field
- * @param [type] $value
- * @return boolean
- */
-    public function isUnique($field, $value){
-        $pdoStatment = $this->pdo->prepare('SELECT COUNT(*) AS `isUsed` FROM users WHERE '.$field.' = :'.$field);
-        $pdoStatment->bindValue(':'.$field, $value, PDO::PARAM_STR);
+    /**
+     * Fonction permettant de vérifier si un champ est unique
+     *
+     * @param [type] $field
+     * @param [type] $value
+     * @return boolean
+     */
+    public function isUnique($field, $value)
+    {
+        $pdoStatment = $this->pdo->prepare('SELECT COUNT(*) AS `isUsed` FROM `users` WHERE ' . $field . ' = :' . $field);
+        $pdoStatment->bindValue(':' . $field, $value, PDO::PARAM_STR);
         $pdoStatment->execute();
         return !$pdoStatment->fetch(PDO::FETCH_OBJ)->isUsed;
     }
+    /**
+     * Methode permettant de récupérer son hash
+     * @return string
+     */
+    public function getUserHash()
+    {
+        $pdoStatment = $this->pdo->prepare('SELECT `password_hash` FROM `users` WHERE `mail` = :mail');
+        $pdoStatment->bindValue(':mail', $this->mail, PDO::PARAM_STR);
+        $pdoStatment->execute();
+        return $pdoStatment->fetch(PDO::FETCH_OBJ)->password_hash;
+    }
+
+    public function getUserInfoByMail(){
+        $pdoStatment = $this->pdo->prepare('SELECT `pseudo`, `level`, `last_session_at`,`avatar`  FROM `users` INNER JOIN `roles` ON `users`.`id_roles` = `roles`.`id` WHERE `mail` = :mail');
+        $pdoStatment->bindValue(':mail', $this->mail, PDO::PARAM_STR);
+        $pdoStatment->execute();
+        return $pdoStatment->fetch(PDO::FETCH_OBJ);
+    }
+
     /**
      * Getter permettant d'avoir accès à tous les attributs de la classe
      * 
@@ -74,7 +94,7 @@ class Users
             } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }

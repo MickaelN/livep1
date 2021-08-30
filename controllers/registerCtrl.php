@@ -1,4 +1,5 @@
 <?php
+require_once 'models/Users.php';
 require_once 'classes/Form.php';
 $registerForm = new Form();
 
@@ -25,7 +26,7 @@ if (isset($_POST['register'])) {
     $registerForm->isValidLength('pseudo', $pseudo, 3, 50);
     //Je vérifie le mail
     $registerForm->isNotEmpty('mail', $mail);
-    $registerForm->isValidFormat('mail', $mail);
+    $registerForm->isValidEmail('mail', $mail);
     $registerForm->isUnique('mail', $mail, 'users');
     //Je vérifie le mot de passe
     $registerForm->isNotEmpty('password', $plainPassword);

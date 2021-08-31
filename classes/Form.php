@@ -48,7 +48,12 @@ class Form
     {
         $class = new $className();
         if (method_exists($class, 'isUnique')) {
-            return $class->isUnique($fieldName, $fieldValue);
+            if($class->isUnique($fieldName, $fieldValue)){
+                return true;
+            }else{
+                $this->error[$fieldName] = 'Le champ ' . $fieldName . ' est déjà utilisé';
+                return false;
+            }
         } else {
             return null;
         }

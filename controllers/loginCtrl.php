@@ -1,4 +1,5 @@
 <?php
+require_once 'models/MainModel.php';
 require_once 'models/Users.php';
 require_once 'classes/Form.php';
 if(isset($_POST['login'])){

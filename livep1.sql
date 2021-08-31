@@ -81,3 +81,29 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+#------------------------------------------------------------
+# Table: MailType
+#------------------------------------------------------------
+
+CREATE TABLE MAILTYPE(
+        ID   Int  Auto_increment  NOT NULL ,
+        NAME Varchar (255) NOT NULL
+	,CONSTRAINT MAILTYPE_PK PRIMARY KEY (ID)
+)ENGINE=InnoDB;
+
+
+#------------------------------------------------------------
+# Table: Mail
+#------------------------------------------------------------
+
+CREATE TABLE MAIL(
+        ID          Int  Auto_increment  NOT NULL ,
+        SUBJECT     Varchar (255) NOT NULL ,
+        CONTENT     Longtext NOT NULL ,
+        ID_MAILTYPE Int NOT NULL
+	,CONSTRAINT MAIL_PK PRIMARY KEY (ID)
+
+	,CONSTRAINT MAIL_MAILTYPE_FK FOREIGN KEY (ID_MAILTYPE) REFERENCES MAILTYPE(ID)
+)ENGINE=InnoDB;

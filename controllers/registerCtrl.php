@@ -1,4 +1,5 @@
 <?php
+require_once 'models/MainModel.php';
 require_once 'models/Users.php';
 require_once 'classes/Form.php';
 $registerForm = new Form();
@@ -40,6 +41,9 @@ if (isset($_POST['register'])) {
         $hashPassword = password_hash($plainPassword, PASSWORD_DEFAULT);
         $user->__set('password_hash', $hashPassword);
         $user->__set('mail', $mail);
-        $user->addUser();
+        $user->__set('hash', Str::getRandomString(60));
+        if($user->addUser() != 0){
+            //envoyer un mail de validation de l'inscription
+        }
     }
 }

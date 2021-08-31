@@ -48,10 +48,32 @@ class Form
     {
         $class = new $className();
         if (method_exists($class, 'isUnique')) {
-            if($class->isUnique($fieldName, $fieldValue)){
+            if ($class->isUnique($fieldName, $fieldValue)) {
                 return true;
-            }else{
+            } else {
                 $this->error[$fieldName] = 'Le champ ' . $fieldName . ' est déjà utilisé';
+                return false;
+            }
+        } else {
+            return null;
+        }
+    }
+    /**
+     * Vérification de l'existence d'une valeur
+     *
+     * @param [type] $fieldName
+     * @param [type] $fieldValue
+     * @param [type] $className
+     * @return void
+     */
+    public function doesExist($fieldName, $fieldValue, $className)
+    {
+        $class = new $className();
+        if (method_exists($class, 'doesExist')) {
+            if ($class->doesExist($fieldName, $fieldValue)) {
+                return true;
+            } else {
+                $this->error[$fieldName] = 'La valeur ' . $fieldName . ' n\'existe pas';
                 return false;
             }
         } else {

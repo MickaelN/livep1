@@ -9,10 +9,11 @@ class Users extends MainModel
     protected $hash = null;
     protected $table = 'users';
 
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
     }
-    
+
     /**
      * Methode permettant d'enregistrer un utilisateur
      *
@@ -41,11 +42,26 @@ class Users extends MainModel
         return $pdoStatment->fetch(PDO::FETCH_OBJ)->password_hash;
     }
 
-    public function getUserInfoByMail(){
-        $pdoStatment = $this->pdo->prepare('SELECT `pseudo`, `level`, `last_session_at`,`avatar`  FROM `users` INNER JOIN `roles` ON `users`.`id_roles` = `roles`.`id` WHERE `mail` = :mail');
+    public function getUserInfoByMail()
+    {
+        $pdoStatment = $this->pdo->prepare('SELECT `users`.`id`, `pseudo`, `level`, `last_session_at`,`avatar`  FROM `users` INNER JOIN `roles` ON `users`.`id_roles` = `roles`.`id` WHERE `mail` = :mail');
         $pdoStatment->bindValue(':mail', $this->mail, PDO::PARAM_STR);
         $pdoStatment->execute();
         return $pdoStatment->fetch(PDO::FETCH_OBJ);
     }
 
+    public function updateUserInfos($userInfos)
+    {
+        $update = [];
+        foreach ($userInfos as $field => $value) {
+            $update[] = $field . ' = :' . $field;
+        }
+        $finalUpdate = implode(', ', $update);
+        $pdoStatment = $this->pdo->prepare('UPDATE ' . $this->table . ' SET ' . $finalUpdate . ' WHERE `id` = :id');
+        foreach ($userInfos as $field => $value) {
+            $pdoStatment->bindValue(':' . $field, $value, PDO::PARAM_STR);
+        }
+        $pdoStatment->bindValue(':id', $this->id, PDO::PARAM_INT);
+        return   $pdoStatment->execute();
+    }
 }

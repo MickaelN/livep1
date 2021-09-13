@@ -30,6 +30,7 @@ if(isset($_POST['login'])){
             $_SESSION['user']['avatar'] = $userInfo->avatar;
             $_SESSION['user']['last_session_at'] = $userInfo->last_session_at;
             $_SESSION['user']['levelAccess'] = $userInfo->level;
+            $_SESSION['user']['id'] = $userInfo->id;
             header('Location: index.php');
             exit;
         }

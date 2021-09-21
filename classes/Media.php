@@ -48,8 +48,8 @@ class Media
      */
     private function isValidSize()
     {
-        var_dump($this->file['size'] );
-        if ($this->file['size'] > $this->maxSize) {
+        $fileSize = filesize($this->file['tmp_name']);
+        if ($fileSize > $this->maxSize) {
             $this->errors['size'] = 'Fichier trop volumineux';
             return false;
         }
@@ -63,9 +63,7 @@ class Media
      */
     private function isValidMediaType()
     {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mime = mime_content_type($this->file['tmp_name']);
-        var_dump($mime);
         if (!in_array($mime, $this->allowedMediaType)) {
             $this->errors['mediaType'] = 'Type de média non valide';
             return false;
@@ -98,13 +96,11 @@ class Media
 
     public function isValidImage()
     {
-        if (!$this->isValidExtension() || !$this->isValidSize() /*|| !$this->isValidMediaType()*/) {
-            return false;
-        }
-        if (!$this->isValidDimension()) {
-            return false;
-        }
-        return true;
+        $this->isValidExtension();
+        $this->isValidSize();
+        $this->isValidMediaType();
+        $this->isValidDimension();
+        return empty($this->errors);
     }
 
     public function addfolder()
@@ -131,6 +127,19 @@ class Media
             $imageSource = imagecreatefromgif($this->file['tmp_name']);
         }
         $imageDest = imagecreatetruecolor($this->minWidth, $this->minHeight);
-        imagecopyresampled($imageDest, $imageSource, 0, 0, 0, 0, $this->minWidth, $this->minHeigt, $imageSize[0], $imageSize[1]);
+        imagecopyresampled($imageDest, $imageSource, 0, 0, 0, 0, $this->minWidth, $this->minHeight, $imageSize[0], $imageSize[1]);
+        if ($this->extension == 'jpg' || $this->extension == 'jpeg') {
+            imagejpeg($imageDest, $this->mediaDirectory . $this->file['name']);
+        } else if ($this->extension == 'png') {
+            imagepng($imageDest, $this->mediaDirectory . $this->file['name']);
+        } else if ($this->extension == 'gif') {
+            imagegif($imageDest, $this->mediaDirectory . $this->file['name']);
+        }
+    }
+
+    public function saveImage(){
+        $this->addfolder();
+        $this->resizeImage();
+        return $this->mediaDirectory . $this->file['name'];
     }
 }

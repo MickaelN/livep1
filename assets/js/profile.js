@@ -19,24 +19,10 @@ pseudo.addEventListener('blur', saveData)
 spanmail.addEventListener('click', showInput )
 mail.addEventListener('blur', saveData)
 
-//Avatar
-saveAvatar.addEventListener('click', () => {
-const avatar = document.getElementById('avatar')
-updateData('avatar' , avatar.files[0].name, true)
-})
-
 //AJAX
-const updateData = (key,value,isFile = false) => {
-    const form = new FormData()
-    if(isFile){
-        file = new File([value], value, {type: 'image/png'})
-        form.append(key,file)
-    }else{
-        form.append(key,value)
-    }
-  
+const updateData = (key,value) => { 
     const xhr = new XMLHttpRequest()
     xhr.open('POST', 'http://livep1connexion/controllers/udpateUserInfoCtrl.php')
-    xhr.send(form)
+    xhr.send(key + '=' + value)
 }
    

@@ -16,12 +16,13 @@
         <p class="modal-title h5">Changement de l'avatar</p>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <form action="#" method="post" enctype="multipart/form-data">
       <div class="modal-body">
         <input type="file" name="avatar" id="avatar" />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveAvatar">Save changes</button>
+        <input type="submit" class="btn btn-primary" value="Enregistrer l'avatar" name="saveAvatar"/>
       </div>
     </div>
   </div>
